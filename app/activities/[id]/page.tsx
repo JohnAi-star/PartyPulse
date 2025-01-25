@@ -1,5 +1,13 @@
 import { Metadata } from 'next';
 import { activities } from '@/lib/data/activities';
+
+interface Activity {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  date: string; // Ensure `date` exists in the `Activity` type
+}
 import ActivityHeader from '@/components/activities/activity-header';
 import ActivityDetails from '@/components/activities/activity-details';
 import BookingForm from '@/components/activities/booking-form';
