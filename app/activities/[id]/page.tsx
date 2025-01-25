@@ -5,17 +5,8 @@ import ActivityDetails from '@/components/activities/activity-details';
 import BookingForm from '@/components/activities/booking-form';
 import { notFound } from 'next/navigation';
 
-// Define the Activity interface
-interface Activity {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  date: string; // Ensure `date` exists and is a string
-}
-
-// Props for the page component
-interface PageProps {
+// Define Props explicitly
+interface Props {
   params: { id: string };
   searchParams?: Record<string, string | string[] | undefined>;
 }
@@ -32,7 +23,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    return {}; // Return empty metadata if activity is not found
+    return {};
   }
 
   return {
@@ -47,15 +38,13 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 
 // Dynamic route page component
-export default function ActivityPage({ params }: PageProps) {
-  // Find the activity by ID
+export default function ActivityPage({ params }: { params: { id: string } }) {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
-    return notFound(); // Show 404 if the activity is not found
+    return notFound(); // If activity is not found, show 404
   }
 
-  // Handle booking form submission
   const handleBookingSubmit = (formData: {
     name: string;
     email: string;
@@ -63,24 +52,22 @@ export default function ActivityPage({ params }: PageProps) {
     time: string;
     guests: number;
   }) => {
+    // Handle booking logic here
     console.log('Booking submitted:', formData);
-    // Add booking logic here if needed
   };
 
   return (
     <div>
       <ActivityHeader
         title={activity.title}
-        date={activity.date} // Ensure `date` is present in `Activity` type
+        date={activity.date} // Ensure `date` exists in the `Activity` type
         description={activity.description}
       />
       <div className="container py-8">
         <div className="grid gap-8 lg:grid-cols-3">
-          {/* Activity details */}
           <div className="lg:col-span-2">
             <ActivityDetails activity={activity} />
           </div>
-          {/* Booking form */}
           <div>
             <div className="sticky top-24">
               <BookingForm onSubmit={handleBookingSubmit} />
